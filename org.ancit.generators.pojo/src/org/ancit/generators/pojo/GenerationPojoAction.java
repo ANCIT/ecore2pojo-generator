@@ -12,7 +12,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EPackage;
@@ -62,24 +61,10 @@ public class GenerationPojoAction implements IObjectActionDelegate {
 					}
 					file.create(is, true, null);
 					
-					EClass eClass = ((EClass)eClassifier);
-					EList<EClass> eSuperTypes = eClass.getESuperTypes();
-					String superTypes = new String();
-					for (EClass sClass : eSuperTypes) {
-						if (eSuperTypes.indexOf(sClass) + 1 == eSuperTypes
-								.size()) {
-							superTypes += sClass.getName();
-						} else {
-							superTypes += sClass.getName() + ",";
-						}
-					}
-					EList<EAttribute> eAttributes = eClass.getEAttributes();
-					for (EAttribute eAttribute : eAttributes) {
-						System.out.println(eAttribute.getName());
-						System.out.println(eAttribute.getEType().getInstanceClassName());
-					}
+					
 					
 				}
+				
 			}
 			
 			
