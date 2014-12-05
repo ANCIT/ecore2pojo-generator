@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Pojo
+Bundle-SymbolicName: org.ancit.generators.pojo;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.ancit.generators.pojo.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.emf.ecore.xmi;bundle-version="2.10.1",
+ org.eclipse.core.resources;bundle-version="3.8.101"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy

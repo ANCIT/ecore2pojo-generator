@@ -1,0 +1,28 @@
+<%@ jet package="org.ancit.generators.pojo.templates" imports="org.eclipse.emf.ecore.* org.eclipse.emf.common.util.*" class="PojoGeneratorTemplate" %>
+<%EClass eClass = (EClass)argument;%>
+<%EList<EClass> eSuperTypes = eClass.getESuperTypes();
+					String superTypes = new String();
+					for (EClass sClass : eSuperTypes) {
+						if (eSuperTypes.indexOf(sClass) + 1 == eSuperTypes
+								.size()) {
+							superTypes += sClass.getName();
+						} else {
+							superTypes += sClass.getName() + ",";
+						}
+					}%>
+					
+public <%if(eClass.isInterface()){%> https://github.com/ANCIT/ecore2pojo-generator.gitinterface <%} else {%> class <%}%><%=eClass.getName()%> <%if(superTypes.length() > 0) {%> extends <%=superTypes%> <%}%> {
+	
+	<%EList<EAttribute> eAttributes = eClass.getEAttributes();
+					for (EAttribute eAttribute : eAttributes) {%>
+	<%if(!eClass.isInterface()){%>private<%}%> <%=eAttribute.getEType().getInstanceClassName()%> <%=eAttribute.getName()%>;
+	<%}%>
+	
+	<%if(!eClass.isInterface()){%>
+	//Constructor
+	public <%=eClass.getName()%>() {
+	
+	}
+	<%}%>
+
+}
