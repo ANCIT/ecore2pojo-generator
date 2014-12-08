@@ -62,24 +62,24 @@ public class GenerateModelClassHandler extends AbstractHandler {
 								.getName() + ".java");
 					}
 					file.create(is, true, null);
-					//
-					// EClass eClass = ((EClass) eClassifier);
-					// EList<EClass> eSuperTypes = eClass.getESuperTypes();
-					// String superTypes = new String();
-					// for (EClass sClass : eSuperTypes) {
-					// if (eSuperTypes.indexOf(sClass) + 1 == eSuperTypes
-					// .size()) {
-					// superTypes += sClass.getName();
-					// } else {
-					// superTypes += sClass.getName() + ",";
-					// }
-					// }
-					// EList<EAttribute> eAttributes = eClass.getEAttributes();
-					// for (EAttribute eAttribute : eAttributes) {
-					// System.out.println(eAttribute.getName());
-					// System.out.println(eAttribute.getEType()
-					// .getInstanceClassName());
-					// }
+
+					EClass eClass = ((EClass) eClassifier);
+					EList<EClass> eSuperTypes = eClass.getESuperTypes();
+					String superTypes = new String();
+					for (EClass sClass : eSuperTypes) {
+						if (eSuperTypes.indexOf(sClass) + 1 == eSuperTypes
+								.size()) {
+							superTypes += sClass.getName();
+						} else {
+							superTypes += sClass.getName() + ",";
+						}
+					}
+					EList<EAttribute> eAttributes = eClass.getEAttributes();
+					for (EAttribute eAttribute : eAttributes) {
+						System.out.println(eAttribute.getName());
+						System.out.println(eAttribute.getEType()
+								.getInstanceClassName());
+					}
 
 				}
 			}

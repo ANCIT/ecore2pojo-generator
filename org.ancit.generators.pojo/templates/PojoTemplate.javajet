@@ -15,14 +15,30 @@ public <%if(eClass.isInterface()){%> https://github.com/ANCIT/ecore2pojo-generat
 	
 	<%EList<EAttribute> eAttributes = eClass.getEAttributes();
 					for (EAttribute eAttribute : eAttributes) {%>
-	<%if(!eClass.isInterface()){%>private<%}%> <%=eAttribute.getEType().getInstanceClassName()%> <%=eAttribute.getName()%>;
+	<%if(!eClass.isInterface()){%>private<%}%> <%=eAttribute.getEType().getInstanceClassName().substring(eAttribute.getEType().getInstanceClassName().lastIndexOf(".") + 1)%> <%=eAttribute.getName()%>;
+	
+	/**
+	 * @return the <%=eAttribute.getName()%>
+	 */
+	<%if(!eClass.isInterface()){%>public<%}%> <%=eAttribute.getEType().getInstanceClassName().substring(eAttribute.getEType().getInstanceClassName().lastIndexOf(".") + 1)%> get<%=eAttribute.getName().toUpperCase()%>(){
+         return <%=eAttribute.getName()%>;
+	}
+		
+	/**
+	 * @param <%=eAttribute.getName()%> the <%=eAttribute.getName()%> to set
+	 */
+	<%if(!eClass.isInterface()){%>public<%}%> void set<%=eAttribute.getName().toUpperCase()%>(<%=eAttribute.getEType().getInstanceClassName().substring(eAttribute.getEType().getInstanceClassName().lastIndexOf(".") + 1)%> <%=eAttribute.getName()%>){
+        this.<%=eAttribute.getName()%> = <%=eAttribute.getName()%>;
+	}										
 	<%}%>
+	
 	
 	<%if(!eClass.isInterface()){%>
-	//Constructor
+	/**
+	 * The constructor
+	 */
 	public <%=eClass.getName()%>() {
-	
+	// TODO Auto-generated constructor stub
 	}
 	<%}%>
-
 }

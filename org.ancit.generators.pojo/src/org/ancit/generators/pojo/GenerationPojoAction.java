@@ -12,6 +12,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EPackage;
@@ -36,39 +37,67 @@ public class GenerationPojoAction implements IObjectActionDelegate {
 	@Override
 	public void run(IAction action) {
 		ResourceSet rSet = new ResourceSetImpl();
-		rSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
-		
-		Resource ecoreResource = rSet.getResource(URI.createFileURI(ecoreFile.getLocation().toOSString()), true);
+		rSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
+				.put("ecore", new EcoreResourceFactoryImpl());
+
+		Resource ecoreResource = rSet.getResource(
+				URI.createFileURI(ecoreFile.getLocation().toOSString()), true);
 		try {
 			ecoreResource.load(null);
-			EPackage ecorePackage = (EPackage)ecoreResource.getContents().get(0);
-			
+			EPackage ecorePackage = (EPackage) ecoreResource.getContents().get(
+					0);
+
 			EList<EClassifier> eClassifiers = ecorePackage.getEClassifiers();
 			for (EClassifier eClassifier : eClassifiers) {
 				PojoGeneratorTemplate generatorTemplate = new PojoGeneratorTemplate();
 				if (eClassifier instanceof EClass) {
-					String generatedClass = generatorTemplate.generate(eClassifier);
-					
+					String generatedClass = generatorTemplate
+							.generate(eClassifier);
+
 					// convert String into InputStream
-					InputStream is = new ByteArrayInputStream(generatedClass.getBytes());
-					
+					InputStream is = new ByteArrayInputStream(
+							generatedClass.getBytes());
+
 					IContainer parent = ecoreFile.getParent();
 					IFile file = null;
-					if(parent instanceof IFolder) {
-						file = ((IFolder)parent).getFile(eClassifier.getName()+".java");
+					if (parent instanceof IFolder) {
+						file = ((IFolder) parent).getFile(eClassifier.getName()
+								+ ".java");
 					} else {
-						file = ((IProject)parent).getFile(eClassifier.getName()+".java");
+						file = ((IProject) parent).getFile(eClassifier
+								.getName() + ".java");
 					}
 					file.create(is, true, null);
-					
-					
-					
+
+					EClass eClass = ((EClass) eClassifier);
+					EList<EClass> eSuperTypes = eClass.getESuperTypes();
+					String superTypes = new String();
+					for (EClass sClass : eSuperTypes) {
+						if (eSuperTypes.indexOf(sClass) + 1 == eSuperTypes
+								.size()) {
+							superTypes += sClass.getName();
+						} else {
+							superTypes += sClass.getName() + ",";
+						}
+					}
+					EList<EAttribute> eAttributes = eClass.getEAttributes();
+					for (EAttribute eAttribute : eAttributes) {
+						System.out.println(eAttribute.getName());
+						System.out.println(eAttribute.getEType()
+								.getInstanceClassName());
+						eAttribute
+								.getEType()
+								.getInstanceClassName()
+								.substring(
+										eAttribute.getEType()
+												.getInstanceClassName()
+												.lastIndexOf(".") + 1);
+					}
+
 				}
-				
+
 			}
-			
-			
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -76,7 +105,6 @@ public class GenerationPojoAction implements IObjectActionDelegate {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 
 	}
 
