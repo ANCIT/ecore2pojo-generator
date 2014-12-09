@@ -16,6 +16,9 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.impl.EAttributeImpl;
+import org.eclipse.emf.ecore.impl.EReferenceImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -80,11 +83,31 @@ public class GenerationPojoAction implements IObjectActionDelegate {
 							superTypes += sClass.getName() + ",";
 						}
 					}
+					EList<EStructuralFeature> eStructuralFeatures = eClass
+							.getEStructuralFeatures();
+					for (EStructuralFeature eStructuralFeature : eStructuralFeatures) {
+
+						if (eStructuralFeature instanceof EReferenceImpl) {
+							System.out.println(eStructuralFeature.getName());
+							System.out.println(eStructuralFeature
+									.getEGenericType().getERawType().getName());
+							if (eStructuralFeature.getUpperBound() < 0
+									|| eStructuralFeature.getUpperBound() > 1) {
+
+							}
+						} else if (eStructuralFeature instanceof EAttributeImpl) {
+							System.out.println(eStructuralFeature.getName());
+							System.out.println(eStructuralFeature.getEType()
+									.getInstanceClassName());
+
+						}
+						System.out.println("-----------");
+					}
 					EList<EAttribute> eAttributes = eClass.getEAttributes();
 					for (EAttribute eAttribute : eAttributes) {
-						System.out.println(eAttribute.getName());
-						System.out.println(eAttribute.getEType()
-								.getInstanceClassName());
+						// System.out.println(eAttribute.getName());
+						// System.out.println(eAttribute.getEType()
+						// .getInstanceClassName());
 						eAttribute
 								.getEType()
 								.getInstanceClassName()
