@@ -11,9 +11,45 @@
          <action
                class="org.ancit.generators.pojo.GenerationPojoAction"
                id="org.ancit.generators.pojo.GenerationPojoAction"
-               label="Generate POJO from Ecore">
+               label="Generate Pojo from Ecore">
          </action>
       </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="org.ancit.generators.ecore2model.command"
+            name="Generate Model from Ecore">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
+         <command
+               commandId="org.ancit.generators.ecore2model.command"
+               label="Generate Model from Ecore"
+               style="push">
+                <visibleWhen>
+				           <with variable="activeMenuSelection">
+				            <iterate
+				                 ifEmpty="false">
+				             <adapt type="org.eclipse.core.resources.IResource">
+				               <test property="org.eclipse.core.resources.name" value="*.ecore" />
+				             </adapt>
+				            </iterate>
+				           </with>
+         			</visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.ancit.generators.pojo.handler.GenerateModelClassHandler"
+            commandId="org.ancit.generators.ecore2model.command">
+      </handler>
    </extension>
 
 </plugin>

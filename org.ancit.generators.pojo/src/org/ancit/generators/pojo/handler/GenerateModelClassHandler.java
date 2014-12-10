@@ -1,10 +1,13 @@
-package org.ancit.generators.pojo;
+package org.ancit.generators.pojo.handler;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import org.ancit.generators.pojo.templates.PojoGeneratorTemplate;
+import org.eclipse.core.commands.AbstractHandler;
+import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -16,29 +19,17 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.impl.EAttributeImpl;
-import org.eclipse.emf.ecore.impl.EReferenceImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IObjectActionDelegate;
-import org.eclipse.ui.IWorkbenchPart;
 
-public class GenerationPojoAction implements IObjectActionDelegate {
-
+public class GenerateModelClassHandler extends AbstractHandler {
 	private IFile ecoreFile;
 
-	public GenerationPojoAction() {
-		// TODO Auto-generated constructor stub
-	}
-
 	@Override
-	public void run(IAction action) {
+	public Object execute(ExecutionEvent event) throws ExecutionException {
+
 		ResourceSet rSet = new ResourceSetImpl();
 		rSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
 				.put("ecore", new EcoreResourceFactoryImpl());
@@ -83,42 +74,14 @@ public class GenerationPojoAction implements IObjectActionDelegate {
 							superTypes += sClass.getName() + ",";
 						}
 					}
-					EList<EStructuralFeature> eStructuralFeatures = eClass
-							.getEStructuralFeatures();
-					for (EStructuralFeature eStructuralFeature : eStructuralFeatures) {
-
-						if (eStructuralFeature instanceof EReferenceImpl) {
-							System.out.println(eStructuralFeature.getName());
-							System.out.println(eStructuralFeature
-									.getEGenericType().getERawType().getName());
-							if (eStructuralFeature.getUpperBound() < 0
-									|| eStructuralFeature.getUpperBound() > 1) {
-
-							}
-						} else if (eStructuralFeature instanceof EAttributeImpl) {
-							System.out.println(eStructuralFeature.getName());
-							System.out.println(eStructuralFeature.getEType()
-									.getInstanceClassName());
-
-						}
-						System.out.println("-----------");
-					}
 					EList<EAttribute> eAttributes = eClass.getEAttributes();
 					for (EAttribute eAttribute : eAttributes) {
-						// System.out.println(eAttribute.getName());
-						// System.out.println(eAttribute.getEType()
-						// .getInstanceClassName());
-						eAttribute
-								.getEType()
-								.getInstanceClassName()
-								.substring(
-										eAttribute.getEType()
-												.getInstanceClassName()
-												.lastIndexOf(".") + 1);
+						System.out.println(eAttribute.getName());
+						System.out.println(eAttribute.getEType()
+								.getInstanceClassName());
 					}
 
 				}
-
 			}
 
 		} catch (IOException e) {
@@ -129,25 +92,7 @@ public class GenerationPojoAction implements IObjectActionDelegate {
 			e.printStackTrace();
 		}
 
-	}
-
-	@Override
-	public void selectionChanged(IAction action, ISelection selection) {
-		if (selection instanceof IStructuredSelection) {
-			IStructuredSelection sSelection = (IStructuredSelection) selection;
-			Object firstElement = sSelection.getFirstElement();
-			if (firstElement instanceof IFile) {
-				ecoreFile = (IFile) firstElement;
-				System.out.println(ecoreFile.getName());
-			}
-		}
-
-	}
-
-	@Override
-	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-		// TODO Auto-generated method stub
-
+		return null;
 	}
 
 }
