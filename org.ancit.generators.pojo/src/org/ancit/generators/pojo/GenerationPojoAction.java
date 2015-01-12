@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.ancit.generators.pojo.templates.PojoClassGeneratorTemplate;
+import org.ancit.generators.pojo.templates.PojoEnumGeneratorTemplate;
 import org.ancit.generators.pojo.templates.PojoInterfaceTemplate;
+import org.eclipse.core.internal.resources.File;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -75,6 +77,9 @@ public class GenerationPojoAction implements IObjectActionDelegate {
 							file = ((IProject) parent).getFile(eClassifier
 									.getName() + ".java");
 						}
+						if (file.exists()) {
+							file.delete(0, null);
+						}
 						file.create(is, true, null);
 
 						// eClass = ((EClass) eClassifier);
@@ -107,6 +112,9 @@ public class GenerationPojoAction implements IObjectActionDelegate {
 						} else {
 							file = ((IProject) parent).getFile(eClassifier
 									.getName() + ".java");
+						}
+						if (file.exists()) {
+							file.delete(0, null);
 						}
 						file.create(is, true, null);
 
@@ -176,7 +184,44 @@ public class GenerationPojoAction implements IObjectActionDelegate {
 					}
 				}
 				if (eClassifier instanceof EEnumImpl) {
+					EEnumImpl eClass = ((EEnumImpl) eClassifier);
+//					if (eClass.isInterface()) {
+					PojoEnumGeneratorTemplate generateEnumTemplate = new PojoEnumGeneratorTemplate();
+						// if (eClassifier instanceof EClass) {
+						String generatedClass = generateEnumTemplate
+								.generate(eClassifier);
+						
+						// convert String into InputStream
+						InputStream is = new ByteArrayInputStream(
+								generatedClass.getBytes());
 
+						IContainer parent = ecoreFile.getParent();
+						IFile file = null;
+						if (parent instanceof IFolder) {
+							file = ((IFolder) parent).getFile(eClassifier
+									.getName() + ".java");
+						} else {
+							file = ((IProject) parent).getFile(eClassifier
+									.getName() + ".java");
+						}
+						if (file.exists()) {
+							file.delete(0, null);
+						}
+						file.create(is, true, null);
+
+						// eClass = ((EClass) eClassifier);
+						// EList<EClass> eSuperTypes = eClass.getESuperTypes();
+						// String superTypes = new String();
+						// for (EClass sClass : eSuperTypes) {
+						// if (eSuperTypes.indexOf(sClass) + 1 == eSuperTypes
+						// .size()) {
+						// superTypes += sClass.getName();
+						// } else {
+						// superTypes += sClass.getName() + ",";
+						// }
+						// }
+						// }
+//					}
 				}
 			}
 		} catch (IOException e) {
@@ -186,6 +231,11 @@ public class GenerationPojoAction implements IObjectActionDelegate {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+	}
+
+	private void deleteFileExist(IFile file) {
+		System.out.println((File) file.getLocation());
 
 	}
 

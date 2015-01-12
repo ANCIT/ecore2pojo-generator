@@ -7,7 +7,9 @@ public class <%=eClass.getName()%> <%if(extendsName.length()>0){%> extends <%=ex
 <%EList<EStructuralFeature> eStructuralFeatures = eClass.getEStructuralFeatures();
 	for (EStructuralFeature eStructuralFeature : eStructuralFeatures) {
 	ArrayList classDesc = PojoGeneratorUtility.getVariableName(eStructuralFeature);%>
+	<%if(null!=classDesc){%>
 	<%if(!eClass.isInterface()){%>private<%}%> <%=classDesc.get(1)%> <%=classDesc.get(0)%>;
+	 <%}%>
 	 <%}%>
 	<%if(!eClass.isInterface()){%>
 	/**
@@ -19,6 +21,7 @@ public class <%=eClass.getName()%> <%if(extendsName.length()>0){%> extends <%=ex
 	<%}%>
 	<%for (EStructuralFeature eStructuralFeature : eStructuralFeatures) {
 	ArrayList classDesc = PojoGeneratorUtility.getVariableName(eStructuralFeature);%>
+	<%if(null!=classDesc){%>
 	/**
 	 * @return the <%=classDesc.get(0)%>
 	 */			            
@@ -34,6 +37,7 @@ public class <%=eClass.getName()%> <%if(extendsName.length()>0){%> extends <%=ex
         this.<%=classDesc.get(0)%> = <%=classDesc.get(0)%>;
     }
     <%}%>
+      <%}%>
  <%if(implementsName.length()>0){
  	for (EClass sClass : eSuperTypes) {
 			if (sClass.isInterface()) {
@@ -44,7 +48,11 @@ public class <%=eClass.getName()%> <%if(extendsName.length()>0){%> extends <%=ex
   @Override
  public <%=implMethodName.get(1)%> get<%=implMethodName.get(2)%>(){
 
-        return null;
+<%if(((String) implMethodName.get(1)).equalsIgnoreCase("int")){%>
+        return 0;
+       <%} else{%> 
+         return null;
+         <%}%>
   }
  
   <%}%>

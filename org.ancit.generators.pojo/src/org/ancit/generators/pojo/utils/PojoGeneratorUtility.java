@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnumLiteral;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.impl.EAttributeImpl;
+import org.eclipse.emf.ecore.impl.EEnumImpl;
 import org.eclipse.emf.ecore.impl.EReferenceImpl;
 
 public class PojoGeneratorUtility {
@@ -92,13 +94,35 @@ public class PojoGeneratorUtility {
 
 	/**
 	 * 
+	 * @param eSuperTypes
+	 * @return
+	 */
+	public static String getEEnumLiteral(EList<EEnumLiteral> eSuperTypes) {
+		String implTypes = new String();
+		for (EEnumLiteral sClass : eSuperTypes) {
+			implTypes += sClass.getName() + " (" + sClass.getValue() + ") ,";
+
+		}
+		if (implTypes.endsWith(",")) {
+			implTypes = implTypes.substring(0, implTypes.length() - 1);
+			implTypes += ";";
+		}
+
+		return implTypes;
+
+	}
+
+	/**
+	 * 
 	 * @param name
 	 * @return
 	 */
 	public static ArrayList<String> getVariableName(
 			EStructuralFeature eStructuralFeature) {
 		ArrayList<String> fieldNames = new ArrayList<String>();
-
+		if (eStructuralFeature.getEType() instanceof EEnumImpl) {
+			return null;
+		}
 		if (eStructuralFeature instanceof EReferenceImpl) {
 
 			if (eStructuralFeature.getUpperBound() < 0
@@ -152,5 +176,4 @@ public class PojoGeneratorUtility {
 		return fieldNames;
 
 	}
-
 }
