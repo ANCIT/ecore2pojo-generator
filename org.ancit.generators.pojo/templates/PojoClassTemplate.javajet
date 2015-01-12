@@ -51,7 +51,7 @@ public class <%=eClass.getName()%> <%if(extendsName.length()>0){%> extends <%=ex
 <%if(((String) implMethodName.get(1)).equalsIgnoreCase("int")){%>
         return 0;
        <%} else{%> 
-         return null;
+  return null;
          <%}%>
   }
  

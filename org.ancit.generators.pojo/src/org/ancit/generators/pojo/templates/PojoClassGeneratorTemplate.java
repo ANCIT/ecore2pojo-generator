@@ -54,7 +54,7 @@ public class PojoClassGeneratorTemplate
   protected final String TEXT_34 = " get";
   protected final String TEXT_35 = "(){" + NL;
   protected final String TEXT_36 = NL + "        return 0;";
-  protected final String TEXT_37 = " " + NL + "         return null;";
+  protected final String TEXT_37 = " " + NL + "  return null;";
   protected final String TEXT_38 = NL + "  }" + NL + " ";
   protected final String TEXT_39 = NL + "}";
 
