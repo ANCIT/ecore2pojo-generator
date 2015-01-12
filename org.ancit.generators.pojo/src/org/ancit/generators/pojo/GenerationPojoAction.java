@@ -4,7 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.ancit.generators.pojo.templates.PojoGeneratorTemplate;
+import org.ancit.generators.pojo.templates.PojoClassGeneratorTemplate;
+import org.ancit.generators.pojo.templates.PojoInterfaceTemplate;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -12,12 +13,12 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.impl.EAttributeImpl;
+import org.eclipse.emf.ecore.impl.EEnumImpl;
 import org.eclipse.emf.ecore.impl.EReferenceImpl;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -52,75 +53,132 @@ public class GenerationPojoAction implements IObjectActionDelegate {
 
 			EList<EClassifier> eClassifiers = ecorePackage.getEClassifiers();
 			for (EClassifier eClassifier : eClassifiers) {
-				PojoGeneratorTemplate generatorTemplate = new PojoGeneratorTemplate();
+				System.out.println(eClassifier);
 				if (eClassifier instanceof EClass) {
-					String generatedClass = generatorTemplate
-							.generate(eClassifier);
-
-					// convert String into InputStream
-					InputStream is = new ByteArrayInputStream(
-							generatedClass.getBytes());
-
-					IContainer parent = ecoreFile.getParent();
-					IFile file = null;
-					if (parent instanceof IFolder) {
-						file = ((IFolder) parent).getFile(eClassifier.getName()
-								+ ".java");
-					} else {
-						file = ((IProject) parent).getFile(eClassifier
-								.getName() + ".java");
-					}
-					file.create(is, true, null);
-
 					EClass eClass = ((EClass) eClassifier);
-					EList<EClass> eSuperTypes = eClass.getESuperTypes();
-					String superTypes = new String();
-					for (EClass sClass : eSuperTypes) {
-						if (eSuperTypes.indexOf(sClass) + 1 == eSuperTypes
-								.size()) {
-							superTypes += sClass.getName();
-						} else {
-							superTypes += sClass.getName() + ",";
-						}
-					}
-					EList<EStructuralFeature> eStructuralFeatures = eClass
-							.getEStructuralFeatures();
-					for (EStructuralFeature eStructuralFeature : eStructuralFeatures) {
+					if (eClass.isInterface()) {
+						PojoInterfaceTemplate generateInterfaceTemplate = new PojoInterfaceTemplate();
+						// if (eClassifier instanceof EClass) {
+						String generatedClass = generateInterfaceTemplate
+								.generate(eClassifier);
 
-						if (eStructuralFeature instanceof EReferenceImpl) {
-							System.out.println(eStructuralFeature.getName());
-							System.out.println(eStructuralFeature
-									.getEGenericType().getERawType().getName());
-							if (eStructuralFeature.getUpperBound() < 0
-									|| eStructuralFeature.getUpperBound() > 1) {
+						// convert String into InputStream
+						InputStream is = new ByteArrayInputStream(
+								generatedClass.getBytes());
+
+						IContainer parent = ecoreFile.getParent();
+						IFile file = null;
+						if (parent instanceof IFolder) {
+							file = ((IFolder) parent).getFile(eClassifier
+									.getName() + ".java");
+						} else {
+							file = ((IProject) parent).getFile(eClassifier
+									.getName() + ".java");
+						}
+						file.create(is, true, null);
+
+						// eClass = ((EClass) eClassifier);
+						// EList<EClass> eSuperTypes = eClass.getESuperTypes();
+						// String superTypes = new String();
+						// for (EClass sClass : eSuperTypes) {
+						// if (eSuperTypes.indexOf(sClass) + 1 == eSuperTypes
+						// .size()) {
+						// superTypes += sClass.getName();
+						// } else {
+						// superTypes += sClass.getName() + ",";
+						// }
+						// }
+						// }
+					} else {
+						PojoClassGeneratorTemplate generatorTemplate = new PojoClassGeneratorTemplate();
+						// if (eClassifier instanceof EClass) {
+						String generatedClass = generatorTemplate
+								.generate(eClassifier);
+
+						// convert String into InputStream
+						InputStream is = new ByteArrayInputStream(
+								generatedClass.getBytes());
+
+						IContainer parent = ecoreFile.getParent();
+						IFile file = null;
+						if (parent instanceof IFolder) {
+							file = ((IFolder) parent).getFile(eClassifier
+									.getName() + ".java");
+						} else {
+							file = ((IProject) parent).getFile(eClassifier
+									.getName() + ".java");
+						}
+						file.create(is, true, null);
+
+						eClass = ((EClass) eClassifier);
+						EList<EClass> eSuperTypes = eClass.getESuperTypes();
+						String superTypes = new String();
+						String implTypes = new String();
+						for (EClass sClass : eSuperTypes) {
+							if (sClass.isInterface()) {
+
+								if (eSuperTypes.indexOf(sClass) + 1 == eSuperTypes
+										.size()) {
+									implTypes += sClass.getName();
+								} else {
+									implTypes += sClass.getName() + ",";
+								}
+
+							} else {
+								if (eSuperTypes.indexOf(sClass) + 1 == eSuperTypes
+										.size()) {
+									superTypes += sClass.getName();
+								} else {
+									superTypes += sClass.getName() + ",";
+								}
+							}
+						}
+						EList<EStructuralFeature> eStructuralFeatures = eClass
+								.getEStructuralFeatures();
+						for (EStructuralFeature eStructuralFeature : eStructuralFeatures) {
+
+							if (eStructuralFeature instanceof EReferenceImpl) {
+								System.out
+										.println(eStructuralFeature.getName());
+								System.out.println(eStructuralFeature
+										.getEGenericType().getERawType()
+										.getName());
+								if (eStructuralFeature.getUpperBound() < 0
+										|| eStructuralFeature.getUpperBound() > 1) {
+
+								}
+							} else if (eStructuralFeature instanceof EAttributeImpl) {
+								System.out
+										.println(eStructuralFeature.getName());
+								System.out.println(eStructuralFeature
+										.getEType().getInstanceClassName());
 
 							}
-						} else if (eStructuralFeature instanceof EAttributeImpl) {
-							System.out.println(eStructuralFeature.getName());
-							System.out.println(eStructuralFeature.getEType()
-									.getInstanceClassName());
-
+							System.out.println("-----------");
 						}
-						System.out.println("-----------");
+						// EList<EAttribute> eAttributes =
+						// eClass.getEAttributes();
+						// for (EAttribute eAttribute : eAttributes) {
+						// // System.out.println(eAttribute.getName());
+						// // System.out.println(eAttribute.getEType()
+						// // .getInstanceClassName());
+						// eAttribute
+						// .getEType()
+						// .getInstanceClassName()
+						// .substring(
+						// eAttribute.getEType()
+						// .getInstanceClassName()
+						// .lastIndexOf(".") + 1);
+						// }
+
+						// }
+
 					}
-					EList<EAttribute> eAttributes = eClass.getEAttributes();
-					for (EAttribute eAttribute : eAttributes) {
-						// System.out.println(eAttribute.getName());
-						// System.out.println(eAttribute.getEType()
-						// .getInstanceClassName());
-						eAttribute
-								.getEType()
-								.getInstanceClassName()
-								.substring(
-										eAttribute.getEType()
-												.getInstanceClassName()
-												.lastIndexOf(".") + 1);
-					}
+				}
+				if (eClassifier instanceof EEnumImpl) {
 
 				}
-
 			}
-
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.ancit.generators.pojo.templates.PojoGeneratorTemplate;
+import org.ancit.generators.pojo.templates.PojoClassGeneratorTemplate;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -43,7 +43,7 @@ public class GenerateModelClassHandler extends AbstractHandler {
 
 			EList<EClassifier> eClassifiers = ecorePackage.getEClassifiers();
 			for (EClassifier eClassifier : eClassifiers) {
-				PojoGeneratorTemplate generatorTemplate = new PojoGeneratorTemplate();
+				PojoClassGeneratorTemplate generatorTemplate = new PojoClassGeneratorTemplate();
 				if (eClassifier instanceof EClass) {
 					String generatedClass = generatorTemplate
 							.generate(eClassifier);
