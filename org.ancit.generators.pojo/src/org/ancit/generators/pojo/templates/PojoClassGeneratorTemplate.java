@@ -27,30 +27,36 @@ public class PojoClassGeneratorTemplate
   protected final String TEXT_7 = "  ";
   protected final String TEXT_8 = "  {";
   protected final String TEXT_9 = NL + "\t";
-  protected final String TEXT_10 = "private";
-  protected final String TEXT_11 = " ";
+  protected final String TEXT_10 = NL + "\t";
+  protected final String TEXT_11 = "private";
   protected final String TEXT_12 = " ";
-  protected final String TEXT_13 = ";" + NL + "\t ";
-  protected final String TEXT_14 = NL + "\t";
-  protected final String TEXT_15 = NL + "\t/**" + NL + "\t * The constructor" + NL + "\t */" + NL + "\tpublic ";
-  protected final String TEXT_16 = "() {" + NL + "\t// TODO Auto-generated constructor stub" + NL + "\t}" + NL + "\t";
-  protected final String TEXT_17 = NL + "\t";
-  protected final String TEXT_18 = NL + "\t/**" + NL + "\t * @return the ";
-  protected final String TEXT_19 = NL + "\t */\t\t\t            " + NL + "\tpublic ";
-  protected final String TEXT_20 = " get";
-  protected final String TEXT_21 = "(){" + NL + "" + NL + "        return this.";
-  protected final String TEXT_22 = ";" + NL + "" + NL + "    }" + NL + "    /**" + NL + "\t * @param ";
-  protected final String TEXT_23 = " the ";
-  protected final String TEXT_24 = " to set" + NL + "\t */" + NL + "\tpublic void set";
-  protected final String TEXT_25 = "(";
-  protected final String TEXT_26 = " ";
-  protected final String TEXT_27 = "){" + NL + "        this.";
-  protected final String TEXT_28 = " = ";
-  protected final String TEXT_29 = ";" + NL + "    }";
-  protected final String TEXT_30 = NL + "  @Override" + NL + " public ";
-  protected final String TEXT_31 = " get";
-  protected final String TEXT_32 = "(){" + NL + "" + NL + "        return null;" + NL + "  }" + NL + " ";
-  protected final String TEXT_33 = NL + "}";
+  protected final String TEXT_13 = " ";
+  protected final String TEXT_14 = ";" + NL + "\t ";
+  protected final String TEXT_15 = NL + "\t ";
+  protected final String TEXT_16 = NL + "\t";
+  protected final String TEXT_17 = NL + "\t/**" + NL + "\t * The constructor" + NL + "\t */" + NL + "\tpublic ";
+  protected final String TEXT_18 = "() {" + NL + "\t// TODO Auto-generated constructor stub" + NL + "\t}" + NL + "\t";
+  protected final String TEXT_19 = NL + "\t";
+  protected final String TEXT_20 = NL + "\t";
+  protected final String TEXT_21 = NL + "\t/**" + NL + "\t * @return the ";
+  protected final String TEXT_22 = NL + "\t */\t\t\t            " + NL + "\tpublic ";
+  protected final String TEXT_23 = " get";
+  protected final String TEXT_24 = "(){" + NL + "" + NL + "        return this.";
+  protected final String TEXT_25 = ";" + NL + "" + NL + "    }" + NL + "    /**" + NL + "\t * @param ";
+  protected final String TEXT_26 = " the ";
+  protected final String TEXT_27 = " to set" + NL + "\t */" + NL + "\tpublic void set";
+  protected final String TEXT_28 = "(";
+  protected final String TEXT_29 = " ";
+  protected final String TEXT_30 = "){" + NL + "        this.";
+  protected final String TEXT_31 = " = ";
+  protected final String TEXT_32 = ";" + NL + "    }";
+  protected final String TEXT_33 = NL + "  @Override" + NL + " public ";
+  protected final String TEXT_34 = " get";
+  protected final String TEXT_35 = "(){" + NL;
+  protected final String TEXT_36 = NL + "        return 0;";
+  protected final String TEXT_37 = " " + NL + "  return null;";
+  protected final String TEXT_38 = NL + "  }" + NL + " ";
+  protected final String TEXT_39 = NL + "}";
 
   public String generate(Object argument)
   {
@@ -78,47 +84,54 @@ String implementsName = PojoGeneratorUtility.getImplementsName(eSuperTypes);
 	for (EStructuralFeature eStructuralFeature : eStructuralFeatures) {
 	ArrayList classDesc = PojoGeneratorUtility.getVariableName(eStructuralFeature);
     stringBuffer.append(TEXT_9);
-    if(!eClass.isInterface()){
+    if(null!=classDesc){
     stringBuffer.append(TEXT_10);
-    }
-    stringBuffer.append(TEXT_11);
-    stringBuffer.append(classDesc.get(1));
-    stringBuffer.append(TEXT_12);
-    stringBuffer.append(classDesc.get(0));
-    stringBuffer.append(TEXT_13);
-    }
-    stringBuffer.append(TEXT_14);
     if(!eClass.isInterface()){
-    stringBuffer.append(TEXT_15);
-    stringBuffer.append(eClass.getName());
-    stringBuffer.append(TEXT_16);
+    stringBuffer.append(TEXT_11);
     }
+    stringBuffer.append(TEXT_12);
+    stringBuffer.append(classDesc.get(1));
+    stringBuffer.append(TEXT_13);
+    stringBuffer.append(classDesc.get(0));
+    stringBuffer.append(TEXT_14);
+    }
+    stringBuffer.append(TEXT_15);
+    }
+    stringBuffer.append(TEXT_16);
+    if(!eClass.isInterface()){
     stringBuffer.append(TEXT_17);
+    stringBuffer.append(eClass.getName());
+    stringBuffer.append(TEXT_18);
+    }
+    stringBuffer.append(TEXT_19);
     for (EStructuralFeature eStructuralFeature : eStructuralFeatures) {
 	ArrayList classDesc = PojoGeneratorUtility.getVariableName(eStructuralFeature);
-    stringBuffer.append(TEXT_18);
-    stringBuffer.append(classDesc.get(0));
-    stringBuffer.append(TEXT_19);
-    stringBuffer.append(classDesc.get(3));
     stringBuffer.append(TEXT_20);
-    stringBuffer.append(classDesc.get(2));
+    if(null!=classDesc){
     stringBuffer.append(TEXT_21);
     stringBuffer.append(classDesc.get(0));
     stringBuffer.append(TEXT_22);
-    stringBuffer.append(classDesc.get(0));
-    stringBuffer.append(TEXT_23);
-    stringBuffer.append(classDesc.get(0));
-    stringBuffer.append(TEXT_24);
-    stringBuffer.append(classDesc.get(2));
-    stringBuffer.append(TEXT_25);
     stringBuffer.append(classDesc.get(3));
+    stringBuffer.append(TEXT_23);
+    stringBuffer.append(classDesc.get(2));
+    stringBuffer.append(TEXT_24);
+    stringBuffer.append(classDesc.get(0));
+    stringBuffer.append(TEXT_25);
+    stringBuffer.append(classDesc.get(0));
     stringBuffer.append(TEXT_26);
     stringBuffer.append(classDesc.get(0));
     stringBuffer.append(TEXT_27);
-    stringBuffer.append(classDesc.get(0));
+    stringBuffer.append(classDesc.get(2));
     stringBuffer.append(TEXT_28);
-    stringBuffer.append(classDesc.get(0));
+    stringBuffer.append(classDesc.get(3));
     stringBuffer.append(TEXT_29);
+    stringBuffer.append(classDesc.get(0));
+    stringBuffer.append(TEXT_30);
+    stringBuffer.append(classDesc.get(0));
+    stringBuffer.append(TEXT_31);
+    stringBuffer.append(classDesc.get(0));
+    stringBuffer.append(TEXT_32);
+    }
     }
     if(implementsName.length()>0){
  	for (EClass sClass : eSuperTypes) {
@@ -127,16 +140,22 @@ String implementsName = PojoGeneratorUtility.getImplementsName(eSuperTypes);
 						.getEStructuralFeatures();
 				for (EStructuralFeature eStructuralFeature : eStructuralFeatures) {
  ArrayList implMethodName =  PojoGeneratorUtility.getVariableName(eStructuralFeature);
-    stringBuffer.append(TEXT_30);
-    stringBuffer.append(implMethodName.get(1));
-    stringBuffer.append(TEXT_31);
-    stringBuffer.append(implMethodName.get(2));
-    stringBuffer.append(TEXT_32);
-    }
-    }
-    }
-    }
     stringBuffer.append(TEXT_33);
+    stringBuffer.append(implMethodName.get(1));
+    stringBuffer.append(TEXT_34);
+    stringBuffer.append(implMethodName.get(2));
+    stringBuffer.append(TEXT_35);
+    if(((String) implMethodName.get(1)).equalsIgnoreCase("int")){
+    stringBuffer.append(TEXT_36);
+    } else{
+    stringBuffer.append(TEXT_37);
+    }
+    stringBuffer.append(TEXT_38);
+    }
+    }
+    }
+    }
+    stringBuffer.append(TEXT_39);
     return stringBuffer.toString();
   }
 }

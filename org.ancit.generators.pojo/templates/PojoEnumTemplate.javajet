@@ -1,0 +1,25 @@
+<%@ jet package="org.ancit.generators.pojo.templates" imports="org.eclipse.emf.ecore.* java.util.* org.eclipse.emf.common.util.* org.ancit.generators.pojo.utils.* org.eclipse.emf.ecore.impl.*" class="PojoEnumGeneratorTemplate" %>
+<%EEnumImpl eClass = (EEnumImpl)argument;%>
+<%EList<EEnumLiteral> eSuperTypes = eClass.getELiterals();
+String classDesc  = PojoGeneratorUtility.getEEnumLiteral(eSuperTypes);%>
+public  enum <%=eClass.getName()%>   {
+<%=classDesc   %>
+
+/**
+ * String value of enum.
+ */
+    private final int value;
+    /**
+     * Get the permission type string.
+     * 
+     * @return String- rule constant
+     */
+    public int value() {
+        return value;
+    }
+  
+  <%=eClass.getName()%>(int val) {
+	value =val;
+}
+	
+ }
